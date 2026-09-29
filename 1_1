@@ -1,8 +1,20 @@
-print("Total indexed nodes:", len(self.index.node_label))
-print("Total distinct labels:", len(self.index.labels))
+# Create EntityLinker object
+linker = EntityLinker()
 
-print(self.index.labels[:20])
+# Build the index from your RDF graph
+index = linker.build_index(g)
 
-print(
-    self.index.label_to_nodes.get("service operation")
-)
+# Debug the generated index
+print("======================================")
+print("BUILD INDEX DEBUG")
+print("======================================")
+
+print("Total indexed nodes  :", len(index.node_label))
+print("Total distinct labels:", len(index.labels))
+
+print("\nFirst 20 labels:")
+for label in index.labels[:20]:
+    print("-", label)
+
+print("\nService Operation lookup:")
+print(index.label_to_nodes.get("service operation"))
