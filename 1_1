@@ -1,0 +1,8 @@
+print("Total indexed nodes:", len(self.index.node_label))
+print("Total distinct labels:", len(self.index.labels))
+
+print(self.index.labels[:20])
+
+print(
+    self.index.label_to_nodes.get("service operation")
+)
