@@ -1,0 +1,65 @@
+# ==========================================================
+# DEBUG — FUZZY MATCH ONLY
+# ==========================================================
+
+test_query = "service operation"
+
+print("=" * 80)
+print("FUZZY MATCH DEBUG")
+print("=" * 80)
+
+print(f"Query           : {test_query}")
+print(f"Backend         : {FUZZY_BACKEND}")
+print(f"Total KG labels : {len(label_index.labels)}")
+print(f"Candidates      : {FUZZY_CANDIDATES}")
+print(f"Cutoff          : {MATCH_CUTOFF}")
+print()
+
+results = fuzzy_match(
+    test_query,
+    label_index.labels,
+    FUZZY_CANDIDATES,
+    MATCH_CUTOFF,
+)
+
+print("FUZZY RESULTS")
+print("-" * 80)
+
+
+
+# ==========================================================
+# DEBUG — SEE ALL FUZZY SCORES
+# ==========================================================
+
+test_query = "service operation"
+
+print("=" * 80)
+print(f"ALL FUZZY SCORES FOR: {test_query}")
+print("=" * 80)
+
+all_scores = []
+
+for label in label_index.labels:
+    score = fuzz.WRatio(test_query, label)
+    all_scores.append((label, score))
+
+# Highest score first
+all_scores.sort(key=lambda x: x[1], reverse=True)
+
+for i, (label, score) in enumerate(all_scores[:50], start=1):
+    status = "KEEP" if score >= MATCH_CUTOFF else "REJECT"
+    print(f"{i:2}. {score:6.2f} | {status:6} | {label}")
+for i, (label, score) in enumerate(results, start=1):
+    print(f"{i:2}. Score = {score:6.2f} | Label = {label}")
+
+
+
+query = "service operation"
+label = "service operations"
+
+score = fuzz.WRatio(query, label)
+
+print(f"Query : {query}")
+print(f"Label : {label}")
+print(f"Score : {score:.2f}")
+print(f"Pass  : {score >= MATCH_CUTOFF}")
